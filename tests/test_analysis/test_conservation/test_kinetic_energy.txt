@@ -1,0 +1,29 @@
+============================================================
+TEST: kinetic_energy
+
+Module:          analysis/conservation.py
+Tested by:       Luca
+Date:            30.10.2026
+Dependencies:    Python, NumPy
+
+1. TEST OBJECTIVE
+⸻
+Verify that the function kinetic_energy() correctly calculates
+the Newtonian energy of motion of a N-body system.
+
+
+2. TEST METHOD
+⸻
+Use REBOUND skript as reference:
+Setup:
+masses = [1.0, 2.0, 3.0, 4.0]
+pos = [(0, 0), (1, 0), (0, 2), (3, 3)]
+vel = [(1, 0), (0, 1), (1, 1), (2, 0)]
+
+Reference value: E_total - E_potential, with E_potential taken from the same system at zero velocity.
+REBOUND = + 12.5
+
+
+3. TEST STATUS
+⸻
+Status: PASSED
