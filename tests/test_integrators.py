@@ -9,7 +9,7 @@ from astroorbit.physics.forces import newtonian
 from astroorbit.physics.units import ASTRO
 
 # accuracy expected after one circular orbit with dt = 1e-3 yr
-TOLERANCE = {"Euler": 1.0, "RK4": 1e-3, "Leapfrog": 1e-3}
+TOLERANCE = {"Euler": 1, "RK4": 1e-3, "Leapfrog": 1e-3}
 
 
 @pytest.mark.parametrize("name", list(TOLERANCE))
@@ -30,4 +30,8 @@ def test_circular_orbit_returns_to_start(name):
     except NotImplementedError:
         pytest.skip(f"{name}.step not implemented yet")
 
+# Checks the distance between the planet's final and initial positions:
+# hypot computes √((x_fin - 1)² + y_fin²), which should be close to zero.
+
     assert np.hypot(pos[2] - 1.0, pos[3]) < TOLERANCE[name]
+
