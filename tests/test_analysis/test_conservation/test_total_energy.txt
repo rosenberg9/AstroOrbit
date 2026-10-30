@@ -1,0 +1,24 @@
+============================================================
+TEST: total_energy
+
+Module:          analysis/conservation.py
+Tested by:       Luca
+Date:            30.10.2026
+Dependencies:    Python, NumPy
+
+1. TEST OBJECTIVE
+⸻
+Verify that the function total_energy() correctly calculates
+the Newtonian total energy of a N-body system.
+
+
+2. TEST METHOD
+⸻
+Test by review: as the two functions are working by themselves, the simple sum of both shall not be tested.
+
+def total_energy(pos, vel, masses, G):
+    return kinetic_energy(vel, masses) + potential_energy(pos, masses, G)
+
+3. TEST STATUS
+⸻
+Status: PASSED
