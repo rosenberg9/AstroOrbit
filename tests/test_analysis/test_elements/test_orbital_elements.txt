@@ -1,0 +1,27 @@
+============================================================
+TEST: orbital_elements
+
+Module:          analysis/elements.py
+Tested by:       Luca
+Date:            30.10.2026
+Dependencies:    Python, NumPy
+
+1. TEST OBJECTIVE
+⸻
+Verify if a, e and period are implemented correctly.
+
+
+2. TEST METHOD
+⸻
+Use REBOUND as reference. 
+sim.G = 1.0
+sim.add(m=1.0, x=0, y=0, vx=0, vy=0)    # central
+sim.add(m=0.0, x=1, y=0, vx=0, vy=1.2)  # body
+
+REF = {"a": 1.7857142857142856, "e": 0.43999999999999995, "period": 14.993320610381373}
+Pass: relative error < 1e-12.
+
+
+3. TEST STATUS
+⸻
+Status: PASSED
