@@ -1,0 +1,25 @@
+============================================================
+TEST: close_encounters
+
+Module:          analysis/stability.py
+Tested by:       Luca
+Date:            30.10.2026
+Dependencies:    Python, NumPy
+
+1. TEST OBJECTIVE
+⸻
+Test if function is sensitive to close encounters.
+
+
+2. TEST METHOD
+⸻
+Set up a scenario for which one expects a close encounter under a given threshold:
+
+Body 0 at rest at (0, 0). Body 1 starts at (-5, 1), v = (1, 0).
+Snapshot at closest approach, t = 5: pos = (0,0, 0,1).
+threshold = 1.5.
+
+
+3. TEST STATUS
+⸻
+Status: PASSED

@@ -1,4 +1,3 @@
-"""Physics checks for the integrators. Skipped until each step() is implemented."""
 import pytest
 
 from astroorbit.analysis.elements import orbital_elements  # 

@@ -1,6 +1,3 @@
-"""Physics checks for the integrators. Skipped until each step() is implemented."""
-import math
-import numpy as np
 import pytest
 
 from astroorbit.analysis.conservation import kinetic_energy
