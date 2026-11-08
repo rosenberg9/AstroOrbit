@@ -103,7 +103,7 @@ class MainWindow:
 
     def command(self, cmd):
         self.message = ""
-        getattr(self.sim, cmd)()  # start / pause / resume / stop / reset
+        getattr(self.sim, cmd)()  # start / pause / resume / reset
         if cmd in ("start", "reset"):
             self.plots.clear()
         if cmd == "reset":
