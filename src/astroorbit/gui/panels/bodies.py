@@ -5,13 +5,13 @@ import math
 from astroorbit.gui.help import HELP, Tooltip
 
 FIELDS = ("name", "mass", "x", "y", "vx", "vy")
-FIELDS_DISPLAY = ("Name", "Mass (solar mass)", "x (AU)", "y (AU)", "vx (AU/year)", "vy (AU/year)")
+#FIELDS_DISPLAY = ("Name", "Mass (solar mass)", "x (AU)", "y (AU)", "vx (AU/year)", "vy (AU/year)")
 
 
 class BodyPanel(ttk.LabelFrame):
     """Calls on_select(i), on_add(), on_apply(i, values), on_delete(i)."""
 
-    def __init__(self, master, on_select, on_add, on_apply, on_delete):
+    def __init__(self, master, on_select, on_add, on_apply, on_delete, units):
         super().__init__(master, text="Bodies", padding=8)
         self.listbox = tk.Listbox(self, height=8, exportselection=False)
         self.listbox.pack(fill="x")
@@ -22,8 +22,11 @@ class BodyPanel(ttk.LabelFrame):
         grid = ttk.Frame(self)
         grid.pack(fill="x", pady=6)
         grid.columnconfigure(1, weight=1)
+        self.labels = []
         for row, key in enumerate(FIELDS):
-            ttk.Label(grid, text=FIELDS_DISPLAY[row], width=15).grid(row=row, column=0, sticky="w")
+            this_label = ttk.Label(grid, text=units.FIELDS_DISPLAY[row], width=15)
+            this_label.grid(row=row, column=0, sticky="w") #pack here to be able to update the labels
+            self.labels.append(this_label)
             var = tk.StringVar()
             entry = ttk.Entry(grid, textvariable=var)
             entry.grid(row=row, column=1, sticky="ew", pady=1)
@@ -51,6 +54,11 @@ class BodyPanel(ttk.LabelFrame):
         if keep is not None and keep < len(bodies):
             self.listbox.selection_set(keep)
         self._fill()
+
+    def update_units(self, units):
+        for n, l in enumerate(self.labels):
+            l["text"] = units.FIELDS_DISPLAY[n]
+
 
     def selected(self):
         sel = self.listbox.curselection()

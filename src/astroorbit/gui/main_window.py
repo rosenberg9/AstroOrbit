@@ -9,6 +9,8 @@ from astroorbit.gui.panels.bodies import BodyPanel
 from astroorbit.gui.panels.controls import ControlPanel
 from astroorbit.gui.plots import PlotsPanel
 from astroorbit.modes import MODES, load_presets
+from astroorbit.gui.panels.dropdowns import DROPDOWNS
+from astroorbit.physics.units import ASTRO, NBODY, UnitSystem, UNIT_SYSTEMS
 from astroorbit.physics.body import Body
 from astroorbit.physics.system import System
 from astroorbit.simulation import Simulation, State
@@ -23,10 +25,12 @@ class MainWindow:
         root.title("AstroOrbit")
         root.geometry("1200x780")
         self.mode = None
+        self.unit = UNIT_SYSTEMS["astro"] #default to astro
         self.sim = None
         self.presets = {}
         self.message = ""  # shown in the status bar until replaced
         self.mode_var = tk.StringVar(value="planet")
+        self.unit_system_var = tk.StringVar(value="astro")#ASTRO
 
         self._build()
         self.load_mode("planet")
@@ -42,6 +46,25 @@ class MainWindow:
                                  command=lambda: self.load_mode(self.mode_var.get()))
             rb.pack(side="left", padx=(16, 0))
             Tooltip(rb, mode.description)
+
+        #to top add dropdown menus, same loop different functionality
+        for key, dd in DROPDOWNS.items():
+            ddm = ttk.Menubutton(top, text = dd.label)
+            ddm.menu = tk.Menu(ddm, tearoff=False)  
+            ddm["menu"]= ddm.menu  
+            for submenu_name, submenu_key in zip(dd.submenu_names, dd.submenu_keys):
+                if key == "Mode": #can do that but seems like a lazy way to go
+                    ddm.menu.add_radiobutton(label = submenu_name, value = submenu_key, variable=self.mode_var, 
+                                             command = lambda: self.load_mode(self.mode_var.get()))
+                elif key == "Units":
+                    ddm.menu.add_radiobutton(label = submenu_name, value = submenu_key, variable=self.unit_system_var, 
+                                             command = lambda: self.load_units(self.unit_system_var.get())) #, command = lambda: self.load_units(self.unit_system) #based on button, load unit system
+                elif key == "Statistics":
+                    ddm.menu.add_radiobutton(label = submenu_name)
+                elif key == "Plot Body Selection":
+                    ddm.menu.add_checkbutton(label = submenu_name)
+            ddm.pack(side = "left", padx=(16, 0))
+            Tooltip(ddm, dd.description)
 
         self.status = ttk.Label(self.root, anchor="w", padding=(10, 4))
         self.status.pack(side="bottom", fill="x")
@@ -64,7 +87,7 @@ class MainWindow:
         self.controls.pack(fill="x")
         self.body_panel = BodyPanel(right, on_select=self.select_body,
                                     on_add=self.add_body, on_apply=self.apply_body,
-                                    on_delete=self.delete_body)
+                                    on_delete=self.delete_body, units=self.unit)
         self.body_panel.pack(fill="both", expand=True, pady=(10, 0))
 
         main.add(left, weight=1)
@@ -95,6 +118,13 @@ class MainWindow:
     def set_integrator(self, name):
         self.sim.set_integrator(name)
         self.redraw()
+
+    # ------------------------------------------------------------ units ---
+    def load_units(self, key):
+        self.unit = UNIT_SYSTEMS[key]
+        self.body_panel.update_units(self.unit) #changes the display, now neeeds to also actually change the displayed values. 
+        #NOT the values that we do calculations with
+
 
     # ------------------------------------------------------------ controls ---
     def apply_dt(self, dt):

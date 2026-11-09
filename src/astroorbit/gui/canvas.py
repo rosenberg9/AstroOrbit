@@ -42,9 +42,8 @@ class OrbitCanvas(tk.Canvas):
                                  fill="#c8cbe0", font=("Helvetica", 10))
             if show_trails:
                 #unpack it here like the others
-                print()
-                all_x = system.pos_past[0::2]#sx + system.pos_past[0::2]
-                all_y = system.pos_past[1::2]#sy + system.pos_past[1::2]
+                all_x = system.pos_past[0::2]
+                all_y = system.pos_past[1::2]
                 x_current = all_x[i::len(system)]
                 y_current = all_y[i::len(system)]
                 #overwrite to always have starting position, to always have 4 points
@@ -57,26 +56,9 @@ class OrbitCanvas(tk.Canvas):
                     c_x, c_y =  self.to_screen(x_current[j], y_current[j])
                     poslist.append(c_x)
                     poslist.append(c_y)
-                    #poslist.append(x_current[j])
-                    #poslist.append(y_current[j])
 
                 if len(poslist) >= 1000: # probably need to sync this to dt step - to be done when i update the git
-                    system.pos_past = system.pos_past[12:] #probably should move this to update
+                    system.pos_past = system.pos_past[12:] #probably should move this to update. normalize wrt step/frame?
 
-                current_all_pos_tuple = list(zip(x_current, y_current))
-                #print(len(current_all_pos_tuple), np.array(current_all_pos_tuple).shape)
-                #print(poslist, col)
                 self.create_line(*poslist, fill=col, width = r/2, smooth = 1)
-                #self.create_line(*current_all_pos_tuple, fill=col, width = 10, smooth = 1)
-                #print(i)
-                if i == 1:
-                    #print(sx - x_current[-1], sy - y_current[-1], sx - x_current[0], sy - y_current[0])
-                    pass
-                    #print(x_current, y_current)
-                    #print(current_all_pos_tuple)
-                    #print(poslist)
-                #self.create_line(poslist[0], poslist[1], poslist[-1], poslist[-2], fill="#23f74a", width = 10)
-                #self.create_line(sx + x_current[-1], sy + y_current[-1], sx + 10, sy + 10, fill="#23f74a", width = 10)
-                #self.create_line(sx - x_current[-1], sy - y_current[-1], sx - x_current[0], sy - y_current[0], fill="#23f74a", width = 50)
-                #asa = 5
 
