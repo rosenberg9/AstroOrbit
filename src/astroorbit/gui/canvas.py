@@ -10,6 +10,11 @@ class OrbitCanvas(tk.Canvas):
         self.cx, self.cy = 0.0, 0.0  # world coordinates at the centre of the view
 
         self.bind("<ButtonPress-1>", self._pan_start)
+        self.bind("<B1-Motion>", self._pan_move)
+        self.bind("<MouseWheel>", self._zoom)                          # macOS / Windows
+        self.bind("<Button-4>", lambda e: self._zoom(e, 1))            # Linux
+        self.bind("<Button-5>", lambda e: self._zoom(e, -1))
+        self._last = None
 
     # ---- view ----
     def fit(self, system):
@@ -26,8 +31,30 @@ class OrbitCanvas(tk.Canvas):
     def _pan_start(self, e):
         self._drag = (e.x, e.y)
 
+    def _pan_move(self, e):
+        x0, y0 = self._drag
+        self.cx -= (e.x - x0) / self.scale
+        self.cy += (e.y - y0) / self.scale
+        self._drag = (e.x, e.y)
+        self._redraw()
+
+    def _zoom(self, e, delta=None):
+        f = 1.1 if (delta if delta is not None else e.delta) > 0 else 1 / 1.1
+        w, h = self.winfo_width(), self.winfo_height()
+        wx = self.cx + (e.x - w / 2) / self.scale      # world point under cursor
+        wy = self.cy - (e.y - h / 2) / self.scale
+        self.scale *= f
+        self.cx = wx - (e.x - w / 2) / self.scale      # keep it under cursor
+        self.cy = wy + (e.y - h / 2) / self.scale
+        self._redraw()
+
+    def _redraw(self):
+        if self._last:
+            self.draw(*self._last)
+
     # ---- drawing ----
     def draw(self, system, show_labels=True, show_trails=False, selected=None):
+        self._last = (system, show_labels, show_trails, selected)
         self.delete("all")
         # TODO: trails (needs position history from Simulation.history)
         for i in range(len(system)):

@@ -56,14 +56,14 @@ DROPDOWNS = {
         units = None, #placeholder values
         plots = None,
     ),
-    "Plot Body Selection": DDMenu(
-        key = "pbselection",
-        label = "Plot Body Selection",
-        description = "Select which bodies should be tracked by plotters below",
-        submenu_names = ["a", "b", "c", "d"],
-        submenu_keys = ["a", "b", "c", "d"],
-        functionality = dummyfunc,
-        units = None, #placeholder values
-        plots = None,
-    ),
+    # "Plot Body Selection": DDMenu(
+    #     key = "pbselection",
+    #     label = "Plot Body Selection",
+    #     description = "Select which bodies should be tracked by plotters below",
+    #     submenu_names = ["a", "b", "c", "d"],
+    #     submenu_keys = ["a", "b", "c", "d"],
+    #     functionality = dummyfunc,
+    #     units = None, #placeholder values
+    #     plots = None,
+    # ),
 }
