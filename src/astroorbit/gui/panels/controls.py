@@ -95,9 +95,9 @@ class ControlPanel(ttk.LabelFrame):
 
     def update_buttons(self, state):
         enabled = {
-            State.STOPPED: {"start", "step", "reset"},
+            State.STOPPED: {"start", "reset"},
             State.RUNNING: {"pause", "reset"},
-            State.PAUSED: {"resume", "step", "reset"},
+            State.PAUSED: {"resume", "reset"},
         }[state]
         for name, b in self.buttons.items():
             b.state(["!disabled"] if name in enabled else ["disabled"])

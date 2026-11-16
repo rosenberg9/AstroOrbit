@@ -63,7 +63,7 @@ class OrbitCanvas(tk.Canvas):
         while len(self._trails) < n:
             self._trails.append([])
         del self._trails[n:]
-        
+
         for i, tr in enumerate(self._trails):
             p = (system.pos[2 * i], system.pos[2 * i + 1])
             if not tr or tr[-1] != p:
@@ -88,18 +88,10 @@ class OrbitCanvas(tk.Canvas):
         for i in range(len(system)):
             sx, sy = self.to_screen(system.pos[2 * i], system.pos[2 * i + 1])
             r = system.radii[i]
-            col = system.colors[i]
             self.create_oval(sx - r, sy - r, sx + r, sy + r, fill=system.colors[i], outline="")
             if i == selected:
                 self.create_oval(sx - r - 4, sy - r - 4, sx + r + 4, sy + r + 4, outline="#ffffff")
             if show_labels:
                 self.create_text(sx + r + 4, sy - r - 2, text=system.names[i], anchor="sw",
                                  fill="#c8cbe0", font=("Helvetica", 10))
-            if show_trails:
-                self._record(system)
-                for i, tr in enumerate(self._trails):
-                    if len(tr) >= 2:
-                        pts = [c for x, y in tr for c in self.to_screen(x, y)]
-                        self.create_line(*pts, fill=system.colors[i],
-                                        width=max(1, system.radii[i] / 2))
 

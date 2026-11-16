@@ -70,7 +70,6 @@ class Simulation:
         s = self.system
         for _ in range(n_steps):
             s.pos, s.vel = self.integrator(s.pos, s.vel, self.accel, self.dt)
-            s.pos_past = np.append(s.pos_past, [*s.pos])
             self.t += self.dt
         self._record()
 
@@ -93,7 +92,6 @@ class Simulation:
         h["t"].append(self.t)
         h["pos"].append(s.pos.copy())
         h["vel"].append(s.vel.copy())
-        h["E"]
         for i in range(1, len(s)):
             el = self._elements(i)
             h["a"].setdefault(s.names[i], []).append((self.t, el["a"]))

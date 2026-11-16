@@ -2,10 +2,9 @@
 """Dropdown Menus with the parameters they will change"""
 from __future__ import annotations
 from dataclasses import dataclass
-from astroorbit.physics.units import ASTRO, NBODY, UnitSystem, UNIT_SYSTEMS
-from astroorbit.modes import MODES, load_presets
+from astroorbit.physics.units import UnitSystem, UNIT_SYSTEMS
+from astroorbit.modes import MODES
 #from astroorbit.gui.main_window import MainWindow
-from astroorbit.physics.integrators import INTEGRATORS
 
 def dummyfunc(*args):
     return None

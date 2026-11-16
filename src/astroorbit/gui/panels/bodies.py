@@ -6,7 +6,6 @@ from astroorbit.gui.help import HELP, Tooltip
 from astroorbit.physics.units import convert
 
 FIELDS = ("name", "mass", "x", "y", "vx", "vy")
-#FIELDS_DISPLAY = ("Name", "Mass (solar mass)", "x (AU)", "y (AU)", "vx (AU/year)", "vy (AU/year)")
 KINDS = {"mass": "mass", "x": "length", "y": "length", "vx": "velocity", "vy": "velocity"}
 
 
