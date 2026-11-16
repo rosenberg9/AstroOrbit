@@ -1,6 +1,6 @@
 """Plots of quantities over time (orbital elements, energy error, ...)."""
 from tkinter import ttk
-
+import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
@@ -20,42 +20,69 @@ HISTORY_KEYS = {
 
 class PlotsPanel(ttk.LabelFrame):
     def __init__(self, master):
-        super().__init__(master, text="Plots", padding=4)
+        # title row: "Plots" + a multi-select menu, used as the frame's label
+        header = ttk.Frame(master)
+        ttk.Label(header, text="Plots").pack(side="left")
+        button = ttk.Menubutton(header, text="Select ▾")
+        button.pack(side="left", padx=(8, 0))
+        menu = tk.Menu(button, tearoff=False)
+        button["menu"] = menu
+        self.show = {}
+        for title in HISTORY_KEYS:
+            var = tk.BooleanVar()
+            menu.add_checkbutton(label=title, variable=var, command=self._layout)
+            self.show[title] = var
+
+        super().__init__(master, labelwidget=header, padding=4)
         self.fig = Figure(figsize=(8, 2), facecolor=BG)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self)
         self.canvas.get_tk_widget().pack(fill="both", expand=True)
         self.axes = {}   # history key -> matplotlib axes
         self.lines = {}  # (history key, line name) -> matplotlib line
         self.frame = 0
+        self._last = None  # (history, colors) of the last refresh, to redraw after a toggle
 
     def set_mode(self, mode):
-        """Make one small plot for each entry in mode.plots."""
+        """Tick the mode's default plots, then build them."""
+        for title, var in self.show.items():
+            var.set(title in mode.plots)
+        self._layout()
+
+    def _layout(self):
+        """One small plot per ticked entry."""
+        titles = [t for t, var in self.show.items() if var.get()]
         self.fig.clear()
         self.axes, self.lines = {}, {}
-        for n, title in enumerate(mode.plots):
-            ax = self.fig.add_subplot(1, len(mode.plots), n + 1, facecolor=BG)
+        for n, title in enumerate(titles):
+            ax = self.fig.add_subplot(1, len(titles), n + 1, facecolor=BG)
             ax.set_title(title, color=TEXT, fontsize=9)
             ax.tick_params(colors=TEXT, labelsize=7)
             ax.yaxis.get_offset_text().set_fontsize(7)
             for spine in ax.spines.values():
                 spine.set_color("#444a60")
-            if title in HISTORY_KEYS:
-                self.axes[HISTORY_KEYS[title]] = ax
+            self.axes[HISTORY_KEYS[title]] = ax
         self.fig.subplots_adjust(left=0.06, right=0.98, bottom=0.14, top=0.86, wspace=0.28)
-        self.canvas.draw_idle()
+        if self._last:
+            self._draw(*self._last)
+        else:
+            self.canvas.draw_idle()
 
     def clear(self):
         """Remove all lines, e.g. after Reset or a new preset."""
         for line in self.lines.values():
             line.remove()
         self.lines = {}
+        self._last = None
         self.canvas.draw_idle()
 
     def refresh(self, history, colors):
-        """Update the lines from history. colors = {body name: colour}."""
+        """Called every frame; redraws once every REFRESH_EVERY frames."""
+        self._last = (history, colors)
         self.frame += 1
-        if self.frame % REFRESH_EVERY:
-            return
+        if self.frame % REFRESH_EVERY == 0:
+            self._draw(history, colors)
+
+    def _draw(self, history, colors):
         for key, ax in self.axes.items():
             for name, points in history[key].items():
                 if (key, name) not in self.lines:
@@ -69,5 +96,4 @@ class PlotsPanel(ttk.LabelFrame):
             if high - low < span:
                 middle = (low + high) / 2
                 ax.set_ylim(middle - span / 2, middle + span / 2, auto=True)
-
         self.canvas.draw_idle()

@@ -45,16 +45,16 @@ DROPDOWNS = {
         units = None, #placeholder values - list\dict of units
         plots = None,
     ),
-    "Statistics": DDMenu(
-        key = "statistics",
-        label = "Statistics",
-        description = "Additional Statistics to be viewed in a new window",
-        submenu_names = ["See Initial Values", "Average change of the Semimajor Axis", "c", "d"],
-        submenu_keys = ["a", "b", "c", "d"],
-        functionality = dummyfunc,
-        units = None, #placeholder values
-        plots = None,
-    ),
+    # "Statistics": DDMenu(
+    #     key = "statistics",
+    #     label = "Statistics",
+    #     description = "Additional Statistics to be viewed in a new window",
+    #     submenu_names = ["See Initial Values", "Average change of the Semimajor Axis", "c", "d"],
+    #     submenu_keys = ["a", "b", "c", "d"],
+    #     functionality = dummyfunc,
+    #     units = None, #placeholder values
+    #     plots = None,
+    # ),
     # "Plot Body Selection": DDMenu(
     #     key = "pbselection",
     #     label = "Plot Body Selection",

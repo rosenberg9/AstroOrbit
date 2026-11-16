@@ -42,11 +42,11 @@ class MainWindow:
         top = ttk.Frame(self.root, padding=(10, 6))
         top.pack(fill="x")
         ttk.Label(top, text="AstroOrbit", font=("Helvetica", 16, "bold")).pack(side="left")
-        for key, mode in MODES.items():
-            rb = ttk.Radiobutton(top, text=mode.label, value=key, variable=self.mode_var,
-                                 command=lambda: self.load_mode(self.mode_var.get()))
-            rb.pack(side="left", padx=(16, 0))
-            Tooltip(rb, mode.description)
+        # for key, mode in MODES.items():
+        #     rb = ttk.Radiobutton(top, text=mode.label, value=key, variable=self.mode_var,
+        #                          command=lambda: self.load_mode(self.mode_var.get()))
+        #     rb.pack(side="left", padx=(16, 0))
+        #     Tooltip(rb, mode.description)
 
         #to top add dropdown menus, same loop different functionality
         for key, dd in DROPDOWNS.items():
@@ -60,8 +60,6 @@ class MainWindow:
                 elif key == "Units":
                     ddm.menu.add_radiobutton(label = submenu_name, value = submenu_key, variable=self.unit_system_var, 
                                              command = lambda: self.load_units(self.unit_system_var.get())) #, command = lambda: self.load_units(self.unit_system) #based on button, load unit system
-                elif key == "Statistics":
-                    ddm.menu.add_radiobutton(label = submenu_name)
                 elif key == "Plot Body Selection":
                     ddm.menu.add_checkbutton(label = submenu_name)
             ddm.pack(side = "left", padx=(16, 0))
