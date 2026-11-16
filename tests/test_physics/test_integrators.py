@@ -32,6 +32,5 @@ def test_circular_orbit_returns_to_start(name):
 
 # Checks the distance between the planet's final and initial positions:
 # hypot computes √((x_fin - 1)² + y_fin²), which should be close to zero.
-
     assert np.hypot(pos[2] - 1.0, pos[3]) < TOLERANCE[name]
 
