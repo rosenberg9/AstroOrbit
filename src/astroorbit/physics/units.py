@@ -1,6 +1,14 @@
-"""Unit systems. Each one fixes the value of G, so physics code never hard-codes it."""
+"""Unit systems. 
+
+N-body units: G = M = L = 1, with M = 1 Msun and L = 1 AU chosen as the physical
+scale. Then T = sqrt(L^3 / (G M)) = 1 yr / 2pi and 1 L/T = 2pi AU/yr ~ 29.8 km/s.
+"""
 import math
 from dataclasses import dataclass
+
+G_SI = 6.67430e-11                                   # m^3 kg^-1 s^-2
+AU, YR, MSUN = 1.495978707e11, 3.15576e7, 1.98847e30  # m, s, kg
+
 
 @dataclass(frozen=True)
 class UnitSystem:
@@ -9,39 +17,29 @@ class UnitSystem:
     time: str
     mass: str
     G: float
-    FIELDS_DISPLAY: tuple
+    length_si: float  # one length unit, in metres
+    time_si: float    # one time unit, in seconds
+    mass_si: float    # one mass unit, in kg
 
-astro_display = ("Name", "Mass (solar mass)", "x (AU)", "y (AU)", "vx (AU/year)", "vy (AU/year)")
-si_display = ("Name", "Mass (kg)", "x (km)", "y (km)", "vx (km/s)", "vy (km/s)")
-nbody_display = ("Name", "Mass (mass unit)", "x (length unit)", "y (length unit)", "vx (length/time)", "vy (length/time)")
-ASTRO = UnitSystem("astro", "AU", "yr", "Msun", 4 * math.pi ** 2, astro_display)
-SI = UnitSystem("SI", "m", "s", "kg", 6.67430e-11, si_display)
-NBODY = UnitSystem("nbody", "L", "T", "M", 1.0, nbody_display)  # G = 1, handy for few-body / chaos setups
+    def factor(self, kind):
+        L, T, M = self.length_si, self.time_si, self.mass_si
+        return {"length": L, "time": T, "mass": M,
+                "velocity": L / T, "energy": M * L ** 2 / T ** 2}[kind]
 
-def ASTRO_convert(a_mass, a_x, a_y, a_vx, a_vy, new_coord_name): #since only displayed values should change, not calculations, these 2 functions should be enough
-    if new_coord_name == "astro":
-        return (a_mass, a_x, a_y, a_vx, a_vy)
-    elif new_coord_name == "SI":
-        si_mass = a_mass * 1.989e+30 #m_sol -> kg
-        si_x = a_x * 1.496e+8 #AU -> m
-        si_y = a_y * 1.496e+8
-        si_vx = a_vx * 4.74372 #AU/yr to km/s
-        si_vy = a_vy* 4.74372
-        si_vals = (si_mass, si_x, si_y, si_vx, si_vy)
-        return si_vals
-    elif new_coord_name == "nbody": #how to transform to nbody?
-        nb_mass = a_mass #* 1.989e+30 #m_sol -> kg
-        nb_x = a_x #* 1.496e+8 #AU -> m
-        nb_y = a_y #* 1.496e+8
-        nb_vx = a_vx #* 4.74372 #AU/yr to km/s
-        nb_vy = a_vy#* 4.74372
-        nb_vals = (nb_mass, nb_x, nb_y, nb_vx, nb_vy)
-        return nb_vals
+    @property
+    def FIELDS_DISPLAY(self):
+        v = f"{self.length}/{self.time}"
+        return ("Name", f"Mass ({self.mass})", f"Initial X ({self.length})", f"Initial Y ({self.length})",
+                f"Initial Velocity X ({v})", f"Initial Velocity Y ({v})")
 
 
-    return None
+def convert(value, kind, frm, to):
+    """value in system frm -> system to. kind: length, time, mass, velocity, energy."""
+    return value * frm.factor(kind) / to.factor(kind)
 
-def ASTRO_to_NBODY():
-    return None
+
+ASTRO = UnitSystem("astro", "AU", "yr", "Msun", 4 * math.pi ** 2, AU, YR, MSUN)
+SI = UnitSystem("SI", "km", "s", "kg", G_SI * 1e-9, 1e3, 1.0, 1.0)
+NBODY = UnitSystem("nbody", "L", "T", "M", 1.0, AU, (AU ** 3 / (G_SI * MSUN)) ** 0.5, MSUN)
 
 UNIT_SYSTEMS = {u.name: u for u in (ASTRO, SI, NBODY)}

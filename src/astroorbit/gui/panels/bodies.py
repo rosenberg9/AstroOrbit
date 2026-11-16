@@ -3,15 +3,17 @@ import tkinter as tk
 from tkinter import ttk
 import math
 from astroorbit.gui.help import HELP, Tooltip
+from astroorbit.physics.units import convert
 
 FIELDS = ("name", "mass", "x", "y", "vx", "vy")
 #FIELDS_DISPLAY = ("Name", "Mass (solar mass)", "x (AU)", "y (AU)", "vx (AU/year)", "vy (AU/year)")
+KINDS = {"mass": "mass", "x": "length", "y": "length", "vx": "velocity", "vy": "velocity"}
 
 
 class BodyPanel(ttk.LabelFrame):
     """Calls on_select(i), on_add(), on_apply(i, values), on_delete(i)."""
 
-    def __init__(self, master, on_select, on_add, on_apply, on_delete, units):
+    def __init__(self, master, on_select, on_add, on_apply, on_delete, units, sim_units):
         super().__init__(master, text="Bodies", padding=8)
         self.listbox = tk.Listbox(self, height=8, exportselection=False)
         self.listbox.pack(fill="x")
@@ -24,7 +26,7 @@ class BodyPanel(ttk.LabelFrame):
         grid.columnconfigure(1, weight=1)
         self.labels = []
         for row, key in enumerate(FIELDS):
-            this_label = ttk.Label(grid, text=units.FIELDS_DISPLAY[row], width=15)
+            this_label = ttk.Label(grid, text=units.FIELDS_DISPLAY[row], width=22)
             this_label.grid(row=row, column=0, sticky="w") #pack here to be able to update the labels
             self.labels.append(this_label)
             var = tk.StringVar()
@@ -45,6 +47,8 @@ class BodyPanel(ttk.LabelFrame):
         ttk.Button(row, text="Delete", command=lambda: self._delete(on_delete)).pack(
             side="left", expand=True, fill="x")
         self._bodies = []
+        self.units, self.sim_units = units, sim_units
+
 
     def set_bodies(self, bodies, keep=None):
         self._bodies = bodies
@@ -55,9 +59,12 @@ class BodyPanel(ttk.LabelFrame):
             self.listbox.selection_set(keep)
         self._fill()
 
-    def update_units(self, units):
+    def update_units(self, units, sim_units=None):
+        self.units = units
+        self.sim_units = sim_units or self.sim_units
         for n, l in enumerate(self.labels):
             l["text"] = units.FIELDS_DISPLAY[n]
+        self._fill()
 
 
     def selected(self):
@@ -70,8 +77,9 @@ class BodyPanel(ttk.LabelFrame):
         valid = True
         for key in FIELDS[1:]:
             try:
-                result[key] = float(self.vars[key].get())
-                ok = math.isfinite(result[key])
+                v = float(self.vars[key].get())
+                ok = math.isfinite(v)
+                result[key] = convert(v, KINDS[key], self.units, self.sim_units)
             except ValueError:
                 ok = False
             self.errors[key].config(text="" if ok else "must be number")
@@ -84,6 +92,8 @@ class BodyPanel(ttk.LabelFrame):
             error.config(text="")
         for key, var in self.vars.items():
             value = "" if i is None else getattr(self._bodies[i], key)
+            if i is not None and key in KINDS:
+                value = convert(value, KINDS[key], self.sim_units, self.units)
             var.set(value if isinstance(value, str) else f"{value:.6g}")
 
     def _selected_changed(self, on_select):

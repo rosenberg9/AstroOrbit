@@ -10,7 +10,7 @@ from astroorbit.gui.panels.controls import ControlPanel
 from astroorbit.gui.plots import PlotsPanel
 from astroorbit.modes import MODES, load_presets
 from astroorbit.gui.panels.dropdowns import DROPDOWNS
-from astroorbit.physics.units import ASTRO, NBODY, UnitSystem, UNIT_SYSTEMS
+from astroorbit.physics.units import ASTRO, NBODY, UnitSystem, UNIT_SYSTEMS, convert
 from astroorbit.physics.body import Body
 from astroorbit.physics.system import System
 from astroorbit.simulation import Simulation, State
@@ -87,7 +87,7 @@ class MainWindow:
         self.controls.pack(fill="x")
         self.body_panel = BodyPanel(right, on_select=self.select_body,
                                     on_add=self.add_body, on_apply=self.apply_body,
-                                    on_delete=self.delete_body, units=self.unit)
+                                    on_delete=self.delete_body, units=self.unit, sim_units=ASTRO)
         self.body_panel.pack(fill="both", expand=True, pady=(10, 0))
 
         main.add(left, weight=1)
@@ -96,6 +96,7 @@ class MainWindow:
     # ------------------------------------------------------- modes/presets ---
     def load_mode(self, key):
         self.mode = MODES[key]
+        self.body_panel.update_units(self.unit, self.mode.units)
         self.presets = load_presets(key)
         self.controls.set_presets(list(self.presets))
         self.controls.set_integrators(list(INTEGRATORS.keys()), self.mode.default_integrator)
@@ -122,9 +123,8 @@ class MainWindow:
     # ------------------------------------------------------------ units ---
     def load_units(self, key):
         self.unit = UNIT_SYSTEMS[key]
-        self.body_panel.update_units(self.unit) #changes the display, now neeeds to also actually change the displayed values. 
-        #NOT the values that we do calculations with
-
+        self.body_panel.update_units(self.unit)
+        self.redraw()
 
     # ------------------------------------------------------------ controls ---
     def apply_dt(self, dt):
