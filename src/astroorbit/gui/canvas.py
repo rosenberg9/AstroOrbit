@@ -16,6 +16,9 @@ class OrbitCanvas(tk.Canvas):
         self.bind("<Button-5>", lambda e: self._zoom(e, -1))
         self._last = None
 
+        self.trail_len = 100      
+        self._trails = []
+
     # ---- view ----
     def fit(self, system):
         """Zoom so every body is visible."""
@@ -52,6 +55,20 @@ class OrbitCanvas(tk.Canvas):
         if self._last:
             self.draw(*self._last)
 
+    def clear_trails(self):
+        self._trails = []
+
+    def _record(self, system):
+        n = len(system)
+        if len(self._trails) != n:
+            self._trails = [[] for _ in range(n)]
+        for i, tr in enumerate(self._trails):
+            p = (system.pos[2 * i], system.pos[2 * i + 1])
+            if not tr or tr[-1] != p:
+                tr.append(p)
+                if len(tr) > self.trail_len:
+                    del tr[0]
+
     # ---- drawing ----
     def draw(self, system, show_labels=True, show_trails=False, selected=None):
         self._last = (system, show_labels, show_trails, selected)
@@ -68,24 +85,10 @@ class OrbitCanvas(tk.Canvas):
                 self.create_text(sx + r + 4, sy - r - 2, text=system.names[i], anchor="sw",
                                  fill="#c8cbe0", font=("Helvetica", 10))
             if show_trails:
-                #unpack it here like the others
-                all_x = system.pos_past[0::2]
-                all_y = system.pos_past[1::2]
-                x_current = all_x[i::len(system)]
-                y_current = all_y[i::len(system)]
-                #overwrite to always have starting position, to always have 4 points
-                x_current = [x_current[0], *x_current]
-                y_current = [y_current[0], *y_current]
-
-                #head against a wall approach
-                poslist = []
-                for j in range(len(x_current)):
-                    c_x, c_y =  self.to_screen(x_current[j], y_current[j])
-                    poslist.append(c_x)
-                    poslist.append(c_y)
-
-                if len(poslist) >= 1000: # probably need to sync this to dt step - to be done when i update the git
-                    system.pos_past = system.pos_past[12:] #probably should move this to update. normalize wrt step/frame?
-
-                self.create_line(*poslist, fill=col, width = r/2, smooth = 1)
+                self._record(system)
+                for i, tr in enumerate(self._trails):
+                    if len(tr) >= 2:
+                        pts = [c for x, y in tr for c in self.to_screen(x, y)]
+                        self.create_line(*pts, fill=system.colors[i],
+                                        width=max(1, system.radii[i] / 2))
 
