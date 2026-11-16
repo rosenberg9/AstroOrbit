@@ -1,4 +1,4 @@
-"""Simulation controls: preset, integrator, time step, speed, start/pause/resume/stop/reset."""
+"""Simulation controls: preset, integrator, time step, speed, start/pause/resume/reset."""
 import math
 import tkinter as tk
 from tkinter import ttk
@@ -64,7 +64,7 @@ class ControlPanel(ttk.LabelFrame):
         self.buttons = {}
         row = ttk.Frame(self)
         row.pack(fill="x", pady=(6, 0))
-        for label in ("Start", "Pause", "Resume", "Stop", "Reset"):
+        for label in ("Start", "Pause", "Resume", "Reset"):
             b = ttk.Button(row, text=label, command=lambda c=label.lower(): on_command(c))
             b.pack(side="left", expand=True, fill="x")
             self.buttons[label.lower()] = b
@@ -96,8 +96,8 @@ class ControlPanel(ttk.LabelFrame):
     def update_buttons(self, state):
         enabled = {
             State.STOPPED: {"start", "step", "reset"},
-            State.RUNNING: {"pause", "stop", "reset"},
-            State.PAUSED: {"resume", "step", "stop", "reset"},
+            State.RUNNING: {"pause", "reset"},
+            State.PAUSED: {"resume", "step", "reset"},
         }[state]
         for name, b in self.buttons.items():
             b.state(["!disabled"] if name in enabled else ["disabled"])
