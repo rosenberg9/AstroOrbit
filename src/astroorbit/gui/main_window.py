@@ -1,5 +1,6 @@
 """Main window: wires the mode bar, canvas, plots and side panels to a Simulation."""
 import tkinter as tk
+import numpy as np
 from dataclasses import replace
 from tkinter import ttk
 
@@ -158,7 +159,8 @@ class MainWindow:
     def add_body(self, values):
         n = len(self.sim.system)
         values["name"] = values["name"] or f"Body {n}"
-        self.sim.system.add_body(Body(**values, color="#ff66cc", radius_px=4))
+        color = "#{:06x}".format(np.random.randint(0, 0x1000000))
+        self.sim.system.add_body(Body(**values, color=color, radius_px=4))
         self.refresh_bodies(keep=n)
 
     def apply_body(self, i, values):
