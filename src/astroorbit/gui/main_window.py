@@ -172,6 +172,7 @@ class MainWindow:
             return
         if len(self.sim.system) > 1:
             self.sim.system.remove_body(i)
+            self.canvas.remove_trail(i)
             self.refresh_bodies()
 
     # ---------------------------------------------------------------- loop ---
