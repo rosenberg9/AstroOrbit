@@ -160,7 +160,10 @@ class MainWindow:
         n = len(self.sim.system)
         values["name"] = values["name"] or f"Body {n}"
         color = "#{:06x}".format(np.random.randint(0, 0x1000000))
-        self.sim.system.add_body(Body(**values, color=color, radius_px=4))
+        mass = values["mass"]
+        radius = 9 - 6 * np.log10(1 / mass) / np.log10(1 / 3.0e-6)
+        radius = np.clip(radius, 3, None)
+        self.sim.system.add_body(Body(**values, color=color, radius_px=radius))
         self.refresh_bodies(keep=n)
 
     def apply_body(self, i, values):
