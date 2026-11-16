@@ -105,3 +105,8 @@ class Simulation:
             if s.names[i] not in self.ejected:
                 self.ejected.append(s.names[i])
                 self.state = State.PAUSED
+
+        E = self._energy()
+        h["E"].setdefault("Total", []).append((self.t, E))
+        if self._E0:
+            h["energy_error"].setdefault("Total", []).append((self.t, (E - self._E0) / abs(self._E0)))
