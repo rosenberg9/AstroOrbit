@@ -115,6 +115,7 @@ class MainWindow:
         self.plots.clear()
         self.root.update_idletasks()
         self.canvas.fit(self.sim.system)
+        self.canvas.clear_trails()
         self.refresh_bodies()
 
     def set_integrator(self, name):
@@ -139,6 +140,7 @@ class MainWindow:
             self.plots.clear()
         if cmd == "reset":
             self.refresh_bodies()
+            self.canvas.clear_trails()
         self.redraw()
 
     def _advance(self):
@@ -174,6 +176,7 @@ class MainWindow:
             return
         if len(self.sim.system) > 1:
             self.sim.system.remove_body(i)
+            self.canvas.remove_trail(i)
             self.refresh_bodies()
 
     # ---------------------------------------------------------------- loop ---
