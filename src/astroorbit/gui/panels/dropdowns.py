@@ -1,5 +1,6 @@
 
 """Dropdown Menus with the parameters they will change"""
+from __future__ import annotations
 from dataclasses import dataclass
 from astroorbit.physics.units import ASTRO, NBODY, UnitSystem, UNIT_SYSTEMS
 from astroorbit.modes import MODES, load_presets
