@@ -14,7 +14,7 @@ class BodyPanel(ttk.LabelFrame):
 
     def __init__(self, master, on_select, on_add, on_apply, on_delete, units, sim_units):
         super().__init__(master, text="Bodies", padding=8)
-        self.listbox = tk.Listbox(self, height=8, exportselection=False)
+        self.listbox = tk.Listbox(self, height=7, exportselection=False)
         self.listbox.pack(fill="x")
         self.listbox.bind("<<ListboxSelect>>", lambda e: self._selected_changed(on_select))
 
