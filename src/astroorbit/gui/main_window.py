@@ -65,8 +65,30 @@ class MainWindow:
             ddm.pack(side = "left", padx=(16, 0))
             Tooltip(ddm, dd.description)
 
-        self.status = ttk.Label(self.root, anchor="w", padding=(10, 4))
-        self.status.pack(side="bottom", fill="x")
+            # Status bar container
+            self.status_frame = tk.Frame(self.root,bg="#0d101b",height=17)
+            self.status_frame.pack(side="bottom", fill="x")
+            self.status_frame.pack_propagate(False)
+            # White simulation information
+            self.status = tk.Label(
+                self.status_frame,
+                anchor="w",
+                font=("Helvetica", 14),
+                fg="white",
+                bg="#0d101b",
+                padx=10,
+            )
+            self.status.pack(side="left")
+            # Red messages and errors
+            self.message_label = tk.Label(
+                self.status_frame,
+                anchor="w",
+                font=("Helvetica", 14),
+                fg="#ff4444",
+                bg="#0d101b",
+                padx=5,
+            )
+        self.message_label.pack(side="left")
 
         main = ttk.PanedWindow(self.root, orient="horizontal")
         main.pack(fill="both", expand=True)
@@ -161,6 +183,8 @@ class MainWindow:
         values["name"] = values["name"] or f"Body {n}"
         color = "#{:06x}".format(np.random.randint(0, 0x1000000))
         mass = values["mass"]
+        # Size of body follows log scale (physical would be M^1/3)
+        # Earth mass give 3 Pixel radius, Sun mass gives 9 pixel
         radius = 9 - 6 * np.log10(1 / mass) / np.log10(1 / 3.0e-6)
         radius = np.clip(radius, 3, None)
         self.sim.system.add_body(Body(**values, color=color, radius_px=radius))
@@ -204,10 +228,14 @@ class MainWindow:
 
     def update_status(self):
         s, u = self.sim, self.mode.units
-        text = (f"{self.mode.label}  ·  {s.state.value}  ·  t = {s.t:.3f} {u.time}  ·  "
-                f"{s.integrator.__name__}  ·  {len(s.system)} bodies")
-        self.status.config(text=f"{text}   |   {self.message}" if self.message else text)
-
+        text = (
+            f"{self.mode.label}  ·  {s.state.value}  ·  "
+            f"t = {s.t:.3f} {u.time}  ·  "
+            f"{s.integrator.__name__}  ·  "
+            f"{len(s.system)} bodies")
+    
+        self.status.config(text=text)
+        self.message_label.config(text=f"|  {self.message}" if self.message else "")
 
 def main():
     root = tk.Tk()

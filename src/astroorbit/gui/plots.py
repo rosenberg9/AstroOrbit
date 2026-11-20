@@ -5,7 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 BG = "#0b0e17"
-TEXT = "#c8cbe0"
+TEXT = "#ffffff"
 REFRESH_EVERY = 10  # redraw once every this many frames: matplotlib is slow
 
 MIN_SPAN = {"a": 0.1, "e": 0.1, "r": 0.1, "E": 0.1}  # smallest y-range per plot: stops noise being magnified
