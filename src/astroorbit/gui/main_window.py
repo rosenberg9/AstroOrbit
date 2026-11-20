@@ -77,6 +77,7 @@ class MainWindow:
                 fg="white",
                 bg="#0d101b",
                 padx=10,
+                pady= 6
             )
             self.status.pack(side="left")
             # Red messages and errors
@@ -87,6 +88,7 @@ class MainWindow:
                 fg="#ff4444",
                 bg="#0d101b",
                 padx=5,
+                pady= 6
             )
         self.message_label.pack(side="left")
 
