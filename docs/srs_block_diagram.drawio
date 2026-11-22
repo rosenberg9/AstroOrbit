@@ -1,0 +1,102 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="srs" name="SRS block diagram">
+    <mxGraphModel dx="1698" dy="1109" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="870" background="#ffffff" math="0" shadow="0" adaptiveColors="none">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c101" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontSize=12;fontSize=18;fontColor=#000000;" value="&lt;b&gt;AstroOrbit: system block diagram&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="320" x="30" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c104" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;whiteSpace=wrap;fontSize=12;fontColor=#000000;strokeColor=#000000;fillColor=#ffffff;" value="User" vertex="1">
+          <mxGeometry height="60" width="30" x="70" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="c107" parent="1" style="swimlane;html=1;startSize=30;rounded=1;arcSize=3;fontStyle=1;fontSize=14;swimlaneFillColor=#ffffff;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" value="Front-end layer" vertex="1">
+          <mxGeometry height="350" width="360" x="230" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c108" parent="c107" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" value="&lt;b&gt;Desktop GUI&lt;/b&gt; (Tkinter)&lt;br&gt;&lt;i&gt;gui/main_window.py&lt;/i&gt;" vertex="1">
+          <mxGeometry height="60" width="320" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c109" parent="c107" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" value="&lt;b&gt;Orbit view&lt;/b&gt;&lt;br&gt;canvas.py: bodies, labels, trails" vertex="1">
+          <mxGeometry height="50" width="320" x="20" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="c110" parent="c107" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" value="&lt;b&gt;Control &amp;amp; editor panels&lt;/b&gt;&lt;br&gt;panels/: start/pause/reset, dt, bodies" vertex="1">
+          <mxGeometry height="50" width="320" x="20" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c111" parent="c107" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#000000;" value="&lt;b&gt;Live plots&lt;/b&gt;&lt;br&gt;plots.py: energy, distance, elements" vertex="1">
+          <mxGeometry height="50" width="320" x="20" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="c114" parent="1" style="swimlane;html=1;startSize=30;rounded=1;arcSize=3;fontStyle=1;fontSize=14;swimlaneFillColor=#ffffff;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" value="Simulation layer" vertex="1">
+          <mxGeometry height="370" width="420" x="680" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c115" parent="c114" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" value="&lt;b&gt;Simulation engine&lt;/b&gt;&lt;br&gt;simulation.py: clock, state, history" vertex="1">
+          <mxGeometry height="60" width="380" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c116" parent="c114" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontColor=#000000;" value="&lt;b&gt;Physics&lt;/b&gt; (physics/)&lt;br&gt;forces.py: N-body gravity&lt;br&gt;integrators.py: Euler, RK4, leapfrog&lt;br&gt;system.py, body.py, units.py" vertex="1">
+          <mxGeometry height="120" width="180" x="20" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c117" parent="c114" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontColor=#000000;" value="&lt;b&gt;Analysis&lt;/b&gt; (analysis/)&lt;br&gt;elements.py: a, e, period&lt;br&gt;conservation.py: energy&lt;br&gt;stability.py: ejections" vertex="1">
+          <mxGeometry height="120" width="180" x="220" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c118" parent="c114" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#000000;" value="&lt;b&gt;Modes&lt;/b&gt;&lt;br&gt;modes.py: planet / comet / chaos, units, plots, preset loading" vertex="1">
+          <mxGeometry height="60" width="380" x="20" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c119" parent="1" style="swimlane;html=1;startSize=30;rounded=1;arcSize=3;fontStyle=1;fontSize=14;swimlaneFillColor=#ffffff;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" value="Data layer" vertex="1">
+          <mxGeometry height="210" width="280" x="1170" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c120" parent="c119" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" value="&lt;b&gt;Simulation history&lt;/b&gt;&lt;br&gt;in memory: t, positions, a, e, r, E" vertex="1">
+          <mxGeometry height="60" width="240" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c122" parent="c119" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#000000;" value="&lt;b&gt;Preset library&lt;/b&gt;&lt;br&gt;presets/*.json (read-only)" vertex="1">
+          <mxGeometry height="60" width="240" x="20" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="c123" parent="1" style="swimlane;html=1;startSize=30;rounded=1;arcSize=3;fontStyle=1;fontSize=14;swimlaneFillColor=#ffffff;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" value="External interfaces / libraries" vertex="1">
+          <mxGeometry height="120" width="460" x="450" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="c124" parent="c123" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" value="&lt;b&gt;Matplotlib&lt;/b&gt;&lt;br&gt;live plots" vertex="1">
+          <mxGeometry height="60" width="110" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c125" parent="c123" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" value="&lt;b&gt;Tk / OS&lt;/b&gt;&lt;br&gt;widgets, timer" vertex="1">
+          <mxGeometry height="60" width="110" x="160" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c127" parent="c123" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;fontSize=12;fillColor=#ffe6cc;strokeColor=#d79b00;fontColor=#000000;" value="&lt;b&gt;NumPy&lt;/b&gt;&lt;br&gt;array maths" vertex="1">
+          <mxGeometry height="60" width="140" x="300" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c132" edge="1" parent="1" source="c108" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=1.0000;exitY=0.5000;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;startArrow=block;startFill=1;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c115" value="method calls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c133" edge="1" parent="1" source="c108" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=1.0000;exitY=0.8500;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c118" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c134" edge="1" parent="1" source="c115" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=0.2368;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c116" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c135" edge="1" parent="1" source="c115" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=0.7632;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c117" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c136" edge="1" parent="1" source="c115" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=1.0000;exitY=0.5000;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c120" value="write each frame">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c137" edge="1" parent="1" source="c118" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=1.0000;exitY=0.5000;exitDx=0;exitDy=0;entryX=0.0000;entryY=0.5000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c122" value="JSON read">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c139" edge="1" parent="1" source="c107" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=0.6111;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c124" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c140" edge="1" parent="1" source="c107" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=0.9722;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.945;entryY=-0.061;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c125" value="">
+          <mxGeometry relative="1" x="-0.1771" as="geometry" />
+        </mxCell>
+        <mxCell id="c142" edge="1" parent="1" source="c114" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;endArrow=block;endFill=1;exitX=0.5000;exitY=1.0000;exitDx=0;exitDy=0;entryX=0.5000;entryY=0.0000;entryDx=0;entryDy=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" target="c127" value="">
+          <mxGeometry relative="1" x="-0.7333" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fmBhY_0dcogbQXJ4PF0K-2" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;fontColor=#000000;strokeColor=#000000;labelBackgroundColor=#ffffff;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="110" y="275" as="sourcePoint" />
+            <mxPoint x="220" y="275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
