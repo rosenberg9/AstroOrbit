@@ -7,7 +7,7 @@ from astroorbit.gui.help import Tooltip, HELP
 
 BG = "#0b0e17"
 TEXT = "#ffffff"
-REFRESH_EVERY = 10  # redraw once every this many frames: matplotlib is slow
+REFRESH_EVERY = 10  # redraw once every this many frames
 
 MIN_SPAN = {"a": 0.1, "e": 0.1, "r": 0.1, "E": 0.1}  # smallest y-range per plot: stops noise being magnified
 

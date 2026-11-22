@@ -6,11 +6,6 @@ from astroorbit.physics.units import UnitSystem, UNIT_SYSTEMS
 from astroorbit.modes import MODES
 #from astroorbit.gui.main_window import MainWindow
 
-def dummyfunc(*args):
-    return None
-
-
-
 @dataclass(frozen=True)
 class DDMenu:
     key: str

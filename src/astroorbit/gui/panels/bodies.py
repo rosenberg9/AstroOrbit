@@ -13,7 +13,7 @@ class BodyPanel(ttk.LabelFrame):
 
     def __init__(self, master, on_select, on_add, on_apply, on_delete, units, sim_units):
         super().__init__(master, text="Bodies", padding=8)
-        self.listbox = tk.Listbox(self, height=7, exportselection=False)
+        self.listbox = tk.Listbox(self, height=6, exportselection=False)
         self.listbox.pack(fill="x")
         self.listbox.bind("<<ListboxSelect>>", lambda e: self._selected_changed(on_select))
         self.listbox.bind("<Button-1>", lambda e: self._click(e, on_select))
@@ -40,11 +40,11 @@ class BodyPanel(ttk.LabelFrame):
 
         row = ttk.Frame(self)
         row.pack(fill="x")
-        self.add_button = ttk.Button(row, text="Add", command=lambda: self._add(on_add))
+        self.add_button = ttk.Button(row, text="Add",width = -1, command=lambda: self._add(on_add))
         self.add_button.pack(side="left", expand=True, fill="x")
-        ttk.Button(row, text="Apply", command=lambda: self._apply(on_apply)).pack(
+        ttk.Button(row, text="Apply", width = -1, command=lambda: self._apply(on_apply)).pack(
             side="left", expand=True, fill="x")
-        ttk.Button(row, text="Delete", command=lambda: self._delete(on_delete)).pack(
+        ttk.Button(row, text="Delete", width = -1, command=lambda: self._delete(on_delete)).pack(
             side="left", expand=True, fill="x")
         self._bodies = []
         self.units, self.sim_units = units, sim_units
