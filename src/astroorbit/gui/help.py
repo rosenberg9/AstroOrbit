@@ -19,7 +19,6 @@ HELP = {
     "labels": "Show body names next to them on the canvas.",
     "start": "Start the simulation from the current state.",
     "pause": "Pause the simulation, keeping the current state.",
-    "run": "Start, pause or resume the simulation.",
     "resume": "Resume the simulation from the current state.",
     "reset": "Reset the simulation to the initial conditions (keeping added bodies).",
     "canvas": "The main canvas for displaying the simulation. Use mouse to zoom and pan.",

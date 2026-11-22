@@ -60,7 +60,7 @@ class ControlPanel(ttk.LabelFrame):
         row = self._row()
         self.run_button = ttk.Button(row, text="Start", command=self._run_clicked)
         self.run_button.pack(side="left", expand=True, fill="x")
-        Tooltip(self.run_button, HELP["run"])
+        self.run_tip = Tooltip(self.run_button, HELP["start"])
         reset = ttk.Button(row, text="Reset", command=partial(on_command, "reset"))
         reset.pack(side="left", expand=True, fill="x")
         Tooltip(reset, HELP["reset"])
@@ -120,3 +120,4 @@ class ControlPanel(ttk.LabelFrame):
     def update_buttons(self, state):
         self.action = ACTIVE[state]
         self.run_button.config(text=self.action.title())
+        self.run_tip.text = HELP[self.action]
