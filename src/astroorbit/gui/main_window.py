@@ -174,7 +174,7 @@ class MainWindow:
 
     # -------------------------------------------------------------- bodies ---
     def refresh_bodies(self, keep=None):
-        self.body_panel.set_bodies(self.sim.system.bodies(), keep)
+        self.body_panel.set_bodies(self.sim._initial.bodies(), keep)
         self.redraw()
 
     def select_body(self, i):
@@ -189,11 +189,13 @@ class MainWindow:
         # Earth mass give 3 Pixel radius, Sun mass gives 9 pixel
         radius = 9 - 6 * np.log10(1 / mass) / np.log10(1 / 3.0e-6)
         radius = np.clip(radius, 3, None)
-        self.sim.system.add_body(Body(**values, color=color, radius_px=radius))
+        self.sim.add_body(Body(**values, color=color, radius_px=radius))
         self.refresh_bodies(keep=n)
 
     def apply_body(self, i, values):
-        self.sim.system.update_body(i, replace(self.sim.system.body(i), **values))
+        self.sim.update_body(i, replace(self.sim.initial_bodies()[i], **values))
+        if self.sim.t > 0:
+            self.message = "Change applies from the next Reset"
         self.refresh_bodies(keep=i)
 
     def delete_body(self, i):
@@ -202,7 +204,7 @@ class MainWindow:
             self.redraw()
             return
         if len(self.sim.system) > 1:
-            self.sim.system.remove_body(i)
+            self.sim.remove_body(i)
             self.canvas.remove_trail(i)
             self.refresh_bodies()
 
@@ -210,6 +212,13 @@ class MainWindow:
     def _tick(self):
         if self.sim and self.sim.state is State.RUNNING:
             self._advance()
+            if self.sim.error:
+                self.message, self.sim.error = self.sim.error, None
+                self.plots.clear()
+                self.canvas.clear_trails()
+                self.refresh_bodies()
+                self.root.after(FRAME_MS, self._tick)
+                return
             if self.sim.ejected:
                 self.message = f"{', '.join(self.sim.ejected)} ejected. Press Reset to start again"
           

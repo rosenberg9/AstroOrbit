@@ -18,6 +18,16 @@ class State(Enum):
     RUNNING = "running"
     PAUSED = "paused"
 
+def closest_pair(pos):
+    """Indices and distance of the two closest bodies."""
+    p = pos.reshape(-1, 2)
+    d = np.linalg.norm(p[:, None] - p[None, :], axis=-1)
+    np.fill_diagonal(d, np.inf)
+    i, j = np.unravel_index(np.argmin(d), d.shape)
+    return i, j, d[i, j]
+
+MIN_SEPARATION = 1e-3
+
 class Simulation:
     def __init__(self, system, mode, integrator=None, dt=None):
         self.mode = mode
@@ -31,6 +41,7 @@ class Simulation:
         self.history = self._empty_history()
         self.max_distance = 10 * abs(system.pos).max()
         self.ejected = []  # names of bodies that have left, each reported once
+        self.error = None  
 
     def accel(self, pos):
         return self._force(pos, self.system.masses, self.mode.units.G)
@@ -65,12 +76,34 @@ class Simulation:
     def set_integrator(self, name):
         self.integrator = INTEGRATORS[name]
 
-    # ---- time stepping ----
+    def initial_bodies(self):
+        return self._initial.bodies()
+
+    def add_body(self, body):
+        self._initial.add_body(body)
+        self.system.add_body(body)           
+
+    def remove_body(self, i):
+        self._initial.remove_body(i)
+        self.system.remove_body(i)
+
+    def update_body(self, i, body):
+        """Applies now if the run hasn't started, otherwise from the next Reset."""
+        self._initial.update_body(i, body)
+        if self.t == 0.0:
+            self.system.update_body(i, body)
+
     def advance(self, n_steps=1):
         s = self.system
         for _ in range(n_steps):
-            s.pos, s.vel = self.integrator(s.pos, s.vel, self.accel, self.dt)
-            self.t += self.dt
+            i, j, r = closest_pair(s.pos)          # 1. measure (finite positions)
+            if r >= MIN_SEPARATION:
+                s.pos, s.vel = self.integrator(s.pos, s.vel, self.accel, self.dt)   # 2. step
+                self.t += self.dt
+            if r < MIN_SEPARATION or not np.isfinite(s.pos).all():                  # 3. check
+                self.reset()
+                self.error = f"Error: {s.names[i]} and {s.names[j]} were too close. Please remove one of them or increase their separation."
+                return
         self._record()
 
     def _empty_history(self):
