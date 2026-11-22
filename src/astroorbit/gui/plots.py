@@ -3,6 +3,7 @@ from tkinter import ttk
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from astroorbit.gui.help import Tooltip, HELP
 
 BG = "#0b0e17"
 TEXT = "#ffffff"
@@ -25,6 +26,7 @@ class PlotsPanel(ttk.LabelFrame):
         ttk.Label(header, text="Plots").pack(side="left")
         button = ttk.Menubutton(header, text="Select ▾")
         button.pack(side="left", padx=(8, 0))
+        Tooltip(button, HELP["plots"])
         menu = tk.Menu(button, tearoff=False)
         button["menu"] = menu
         self.show = {}

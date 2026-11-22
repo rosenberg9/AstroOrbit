@@ -3,9 +3,8 @@ import tkinter as tk
 import numpy as np
 from dataclasses import replace
 from tkinter import ttk
-
 from astroorbit.gui.canvas import OrbitCanvas
-from astroorbit.gui.help import Tooltip
+from astroorbit.gui.help import Tooltip, HELP
 from astroorbit.gui.panels.bodies import BodyPanel
 from astroorbit.gui.panels.controls import ControlPanel
 from astroorbit.gui.plots import PlotsPanel
@@ -99,6 +98,7 @@ class MainWindow:
         self.canvas = OrbitCanvas(left)
         self.canvas.pack(expand=True, fill=tk.BOTH)
         self.canvas.on_view_change = self.redraw
+        Tooltip(self.canvas, HELP["canvas"])
         self.plots = PlotsPanel(left)
         left.add(self.canvas, weight=4)
         left.add(self.plots, weight=1)

@@ -8,7 +8,6 @@ from astroorbit.physics.units import convert
 FIELDS = ("name", "mass", "x", "y", "vx", "vy")
 KINDS = {"mass": "mass", "x": "length", "y": "length", "vx": "velocity", "vy": "velocity"}
 
-
 class BodyPanel(ttk.LabelFrame):
     """Calls on_select(i), on_add(), on_apply(i, values), on_delete(i)."""
 
@@ -17,6 +16,7 @@ class BodyPanel(ttk.LabelFrame):
         self.listbox = tk.Listbox(self, height=7, exportselection=False)
         self.listbox.pack(fill="x")
         self.listbox.bind("<<ListboxSelect>>", lambda e: self._selected_changed(on_select))
+        self.listbox.bind("<Button-1>", lambda e: self._click(e, on_select))
 
         self.vars = {}
         self.errors = {}
@@ -40,7 +40,8 @@ class BodyPanel(ttk.LabelFrame):
 
         row = ttk.Frame(self)
         row.pack(fill="x")
-        ttk.Button(row, text="Add", command=lambda: self._add(on_add)).pack(side="left", expand=True, fill="x")
+        self.add_button = ttk.Button(row, text="Add", command=lambda: self._add(on_add))
+        self.add_button.pack(side="left", expand=True, fill="x")
         ttk.Button(row, text="Apply", command=lambda: self._apply(on_apply)).pack(
             side="left", expand=True, fill="x")
         ttk.Button(row, text="Delete", command=lambda: self._delete(on_delete)).pack(
@@ -65,7 +66,14 @@ class BodyPanel(ttk.LabelFrame):
             l["text"] = units.FIELDS_DISPLAY[n]
         self._fill()
 
-
+    def _click(self, e, on_select):
+        i = self.listbox.nearest(e.y)
+        if i in self.listbox.curselection():
+            self.listbox.selection_clear(0, "end")
+            self._fill()
+            on_select(None)
+            return "break" 
+        
     def selected(self):
         sel = self.listbox.curselection()
         return sel[0] if sel else None
@@ -94,6 +102,7 @@ class BodyPanel(ttk.LabelFrame):
             if i is not None and key in KINDS:
                 value = convert(value, KINDS[key], self.sim_units, self.units)
             var.set(value if isinstance(value, str) else f"{value:.6g}")
+        self.add_button.config(text="Add" if i is None else "Duplicate")
 
     def _selected_changed(self, on_select):
         self._fill()

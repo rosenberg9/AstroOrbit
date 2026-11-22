@@ -32,6 +32,7 @@ class ControlPanel(ttk.LabelFrame):
         self.preset_box = ttk.Combobox(self, textvariable=self.preset, state="readonly")
         self.preset_box.pack(fill="x")
         self.preset_box.bind("<<ComboboxSelected>>", lambda e: on_preset(self.preset.get()))
+        Tooltip(self.preset_box, HELP["preset"])
 
         ttk.Label(self, text="Integrator").pack(anchor="w", pady=(6, 0))
         self.integrator_box = ttk.Combobox(self, textvariable=self.integrator, state="readonly")
@@ -64,10 +65,11 @@ class ControlPanel(ttk.LabelFrame):
         self.buttons = {}
         row = ttk.Frame(self)
         row.pack(fill="x", pady=(6, 0))
-        for label in ("Start", "Pause", "Resume", "Reset"):
-            b = ttk.Button(row, text=label, command=lambda c=label.lower(): on_command(c))
+        for label_name in ("Start", "Pause", "Resume", "Reset"):
+            b = ttk.Button(row, text=label_name, command=lambda c=label_name.lower(): on_command(c))
+            Tooltip(b, HELP[label_name.lower()])
             b.pack(side="left", expand=True, fill="x")
-            self.buttons[label.lower()] = b
+            self.buttons[label_name.lower()] = b
 
         row = ttk.Frame(self)
         row.pack(fill="x", pady=(6, 0))
