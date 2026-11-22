@@ -116,7 +116,7 @@ class MainWindow:
         system = System([Body(**b) for b in preset["bodies"]])
         self.sim = Simulation(system, self.mode, integrator=self.controls.integrator.get(), dt=preset["dt"])
         self.controls.set_dt(self.sim.dt)
-        self.message = preset["description"]
+        #self.message = preset["description"]
         self.root.update_idletasks()          # so the canvas knows its size before fitting
         self.canvas.fit(self.sim.system)
         self._clear_view()
